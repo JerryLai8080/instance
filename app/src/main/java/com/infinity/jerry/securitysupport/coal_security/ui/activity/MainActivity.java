@@ -10,7 +10,6 @@ import com.infinity.jerry.securitysupport.R;
 import com.infinity.jerry.securitysupport.coal_security.ui.fragment.MainLeftFragment;
 import com.infinity.jerry.securitysupport.coal_security.ui.fragment.MainRightFragment;
 import com.infinity.jerry.securitysupport.common.base.BaseActivity;
-import com.infinity.jerry.securitysupport.common.test.TestActivity;
 import com.infinity.jerry.securitysupport.common.z_utils.z_adapter.ZViewPagerAdapter;
 import com.infinity.jerry.securitysupport.common.z_utils.z_widget.ZTitleBar;
 
@@ -61,11 +60,11 @@ public class MainActivity extends BaseActivity {
         titleBar.setTitleMode(ZTitleBar.Companion.getMODE_TEXT());
         titleBar.setTitle(getString(R.string.app_title));
         titleBar.noBack();
-        titleBar.setTvPlusText("同步");
+        titleBar.setTvPlusText("同步/上传");
         titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
             @Override
-            public void onClickTextMode() {
-                Intent intent = new Intent(MainActivity.this, TestActivity.class);
+            public void onClickTextMode() {//TestActivity
+                Intent intent = new Intent(MainActivity.this, SynAllDataActivity.class);
                 startActivity(intent);
             }
         });

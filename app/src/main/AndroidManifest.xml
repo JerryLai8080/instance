@@ -146,6 +146,7 @@
         <activity android:name=".coal_security.ui.activity.syn_check.CheckSynHistoryActvitiy" />
         <activity android:name=".coal_security.ui.activity.syn_check.CheckSynDetailActivity" />
         <activity android:name=".coal_security.ui.activity.syn_review.ReviewSynActivity" />
+        <activity android:name=".coal_security.ui.activity.SynAllDataActivity" />
 
         <service android:name=".common.otherstuff.PDFDownloadService" />
     </application>

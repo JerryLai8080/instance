@@ -29,7 +29,7 @@ public abstract class ZResultSubscriber<T> extends Subscriber<ZCommonEntity<T>> 
 
     @Override
     public void onNext(ZCommonEntity<T> tZcommonEntity) {
-        if (tZcommonEntity.getCode() == 0) {
+        if (tZcommonEntity.getCode() == 200) {
             onSuccessZ(tZcommonEntity.getData());
         }else{
             onError(new Throwable("nonononono"));
