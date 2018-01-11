@@ -1,5 +1,6 @@
 package com.infinity.jerry.securitysupport.coal_security.ui.activity.company;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -9,6 +10,9 @@ import android.widget.TextView;
 
 import com.infinity.jerry.securitysupport.R;
 import com.infinity.jerry.securitysupport.coal_security.constant.CoalConstant;
+import com.infinity.jerry.securitysupport.coal_security.dao.i_view.IViewCompany;
+import com.infinity.jerry.securitysupport.coal_security.dao.presenter.CompanyPresenter;
+import com.infinity.jerry.securitysupport.coal_security.dao.temp_entity.CompanyTemp;
 import com.infinity.jerry.securitysupport.coal_security.ui.activity.check.CheckNewActivity;
 import com.infinity.jerry.securitysupport.common.base.BaseActivity;
 import com.infinity.jerry.securitysupport.common.entity.CompanyCoalEntity;
@@ -24,16 +28,18 @@ import com.infinity.jerry.securitysupport.common.z_utils.z_widget.ZTitleBar;
 
 import org.litepal.crud.DataSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by jerry on 2017/11/13.
  */
 
-public class CompanyListActivityX extends BaseActivity {
+public class CompanyListActivityX extends BaseActivity implements IViewCompany {
 
     @BindView(R.id.titleBar)
     ZTitleBar titleBar;
@@ -55,6 +61,10 @@ public class CompanyListActivityX extends BaseActivity {
 
     private int startType;
 
+    private CompanyPresenter presenter;
+    private Dialog dialog;
+
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_company_main;
@@ -68,13 +78,26 @@ public class CompanyListActivityX extends BaseActivity {
 
     @Override
     public void initPresenter() {
-
+        presenter = CompanyPresenter.getInstance(this);
     }
+
+    private void synCompanyData() {
+        dialog.show();
+        presenter.getCompanies();
+    }
+
 
     @Override
     public void initView() {
         titleBar.setTitle(getString(R.string.coal_company));
-        titleBar.setTitleMode(ZTitleBar.Companion.getMODE_NONE());
+        titleBar.setTitleMode(ZTitleBar.Companion.getMODE_TEXT());
+        titleBar.setTvPlusText("同步企业信息");
+        titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
+            @Override
+            public void onClickTextMode() {
+                synCompanyData();
+            }
+        });
         searchBar.setSearchHint(getString(R.string.enter_company_name));
         searchBar.setOnSearchListener(new ZSearchBar.ZOnSearchListener() {
             @Override
@@ -174,4 +197,32 @@ public class CompanyListActivityX extends BaseActivity {
             tvChoosed.setTextColor(ContextCompat.getColor(this, R.color.appMainColor));
         }
     }
+
+    @Override
+    public void getCompanySucc(List<CompanyTemp> dataList) {
+        List<CompanyCoalEntity> companyCoalEntities = new ArrayList<>();
+        for (CompanyTemp item : dataList) {
+            CompanyCoalEntity entity = new CompanyCoalEntity();
+            entity.setCompanyCode(item.getCompany_code());
+            entity.setCompanyName(item.getCompany_name());
+            entity.setCompanyLocation(item.getCompany_location());
+            entity.setCompanyArea(item.getCompany_area());
+            entity.setCompanyState(item.getCompany_state());
+            entity.setDirector(item.getDirector());
+            entity.setLeaglPerson(item.getLeagl_person());
+            entity.setCoalPhone(item.getCoal_phone());
+            entity.setCoalCell(item.getCoal_cell());
+            entity.setCoalUrl(item.getCoal_url());
+            companyCoalEntities.add(entity);
+        }
+        DataSupport.deleteAll(CompanyCoalEntity.class);
+        DataSupport.saveAll(companyCoalEntities);
+    }
+
+    @Override
+    public void getCompanyError() {
+        Toasty.error(this, "获取公司信息失败").show();
+    }
+
+
 }

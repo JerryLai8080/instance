@@ -14,6 +14,15 @@ public class PlanToDocEntity extends DataSupport {
     private int docType;
     private int docId;
     private String docName;
+    private String docPath;
+
+    public String getDocPath() {
+        return docPath;
+    }
+
+    public void setDocPath(String docPath) {
+        this.docPath = docPath;
+    }
 
     @Override
     public String toString() {

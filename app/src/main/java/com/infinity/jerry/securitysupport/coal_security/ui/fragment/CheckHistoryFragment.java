@@ -69,10 +69,11 @@ public class CheckHistoryFragment extends Fragment {
                 tvTime.setText(item.getStartTime() + "至" + endTime);
                 TextView tvSynBtn = holder.getView(R.id.tvSynBtn);
                 tvSynBtn.setVisibility(View.GONE);
+                TextView tvUpdate = holder.getView(R.id.tvUpdate);
+                tvUpdate.setVisibility(View.GONE);
             }
         };
         listView.setAdapter(adapter);
-
     }
 
     @Override

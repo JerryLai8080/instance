@@ -119,7 +119,7 @@ public class SceneDealActivity extends BaseActivity {
         titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
             @Override
             public void onClickTextMode() {
-                saveData();
+                printAndSave(false);
                 Toasty.success(SceneDealActivity.this, "完成").show();
             }
         });
@@ -131,7 +131,7 @@ public class SceneDealActivity extends BaseActivity {
         });
     }
 
-    private void saveData() {
+    private void save(String path) {
         String inspItem = edInspItem.getText().toString().trim();
         String time = edCheckTime.getText().toString().trim();
         String illgal = edIllgal.getText().toString().trim();
@@ -154,6 +154,7 @@ public class SceneDealActivity extends BaseActivity {
             PlanToDocEntity entityX = new PlanToDocEntity();
             entityX.setPlanId(planId);
             entityX.setDocName("现场处理措施决定书");
+            entityX.setDocPath(path);
             entityX.setDocType(DocsConstant.SCENE_DEAL);
             entityX.save();
         } else {
@@ -172,7 +173,6 @@ public class SceneDealActivity extends BaseActivity {
 
 
     private void printAndSave(boolean isPrint) {
-        saveData();
         String inspItem = edInspItem.getText().toString().trim();
         String time = edCheckTime.getText().toString().trim();
         String reference = edReference.getText().toString().trim();
@@ -197,13 +197,18 @@ public class SceneDealActivity extends BaseActivity {
         params.put("${name}", investName);
         params.put("${something}", something);
 
-        CoalDocUtils.entryPrinterShare(this, "现场处理措施决定书", "XianChangChuLiJueDingShu.doc", params, new CallBack1() {
-            @Override
-            public void callBack(Object object) {
-                Intent intent = (Intent) object;
-                startActivity(intent);
-            }
-        });
-
+        String result = null;
+        if (isPrint) {
+            CoalDocUtils.entryPrinterShare(this, "现场处理措施决定书", "XianChangChuLiJueDingShu.doc", params, new CallBack1() {
+                @Override
+                public void callBack(Object object) {
+                    Intent intent = (Intent) object;
+                    startActivity(intent);
+                }
+            });
+        } else {
+            result = CoalDocUtils.writeDocAndGetPath(this, "现场处理措施决定书", "XianChangChuLiJueDingShu.doc", params);
+            save(result);
+        }
     }
 }

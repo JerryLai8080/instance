@@ -6,7 +6,7 @@ import com.infinity.jerry.securitysupport.coal_security.dao.temp_entity.PlanReco
  * Created by jerry on 2017/12/27.
  */
 
-public interface IViewDataSyn {
+public interface IViewPlanSyn {
 
     void getDataSucc(PlanRecordTemp data);
     void getDataError();

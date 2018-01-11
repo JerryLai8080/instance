@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="safty_security" />
 
-    <version value="14" />
+    <version value="20" />
 
     <list>
         <mapping class="com.infinity.jerry.securitysupport.common.entity.CompanyCoalEntity" />

@@ -102,7 +102,7 @@ public class BeBetterAdviceActivity extends BaseActivity {
         titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
             @Override
             public void onClickTextMode() {
-                save();
+                printAndSave(false);
                 Toasty.success(BeBetterAdviceActivity.this, "完成").show();
             }
         });
@@ -114,7 +114,7 @@ public class BeBetterAdviceActivity extends BaseActivity {
         });
     }
 
-    private void save() {
+    private void save(String path) {
 //        加强和改善安全监督管理建议书
         String inspItem = edInspItem.getText().toString().trim();
         String name = edName.getText().toString().trim();
@@ -133,6 +133,7 @@ public class BeBetterAdviceActivity extends BaseActivity {
             //第一次
             PlanToDocEntity entityX = new PlanToDocEntity();
             entityX.setPlanId(planId);
+            entityX.setDocPath(path);
             entityX.setDocName("加强和改善安全监督管理建议书");
             entityX.setDocType(DocsConstant.BETTER_ADVICE);
             entityX.save();
@@ -144,10 +145,11 @@ public class BeBetterAdviceActivity extends BaseActivity {
             record.setBaosong(baosong);
             record.update(record.getId());
         }
+        setResult(RESULT_OK);
+        finish();
     }
 
     private void printAndSave(boolean isPrint) {
-        save();
         String name = edName.getText().toString().trim();
         String tell = edTelling.getText().toString().trim();
         String baosong = edBaosong.getText().toString().trim();
@@ -165,12 +167,18 @@ public class BeBetterAdviceActivity extends BaseActivity {
         params.put("${baosong}", baosong);
         params.put("${linex}", DocMultiHelper.SOMETHING_SHIT);
 
-        CoalDocUtils.entryPrinterShare(this, "加强和改善安全监督管理建议书", "JiaQiangHeGaiShanAnQuanJianDuGuanLiJianYiShu.doc", params, new CallBack1() {
-            @Override
-            public void callBack(Object object) {
-                Intent intent = (Intent) object;
-                startActivity(intent);
-            }
-        });
+        String result = null;
+        if (isPrint) {
+            CoalDocUtils.entryPrinterShare(this, "加强和改善安全监督管理建议书", "JiaQiangHeGaiShanAnQuanJianDuGuanLiJianYiShu.doc", params, new CallBack1() {
+                @Override
+                public void callBack(Object object) {
+                    Intent intent = (Intent) object;
+                    startActivity(intent);
+                }
+            });
+        } else {
+            result = CoalDocUtils.writeDocAndGetPath(this, "加强和改善安全监督管理建议书", "JiaQiangHeGaiShanAnQuanJianDuGuanLiJianYiShu.doc", params);
+            save(result);
+        }
     }
 }

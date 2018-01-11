@@ -1,13 +1,18 @@
 package com.infinity.jerry.securitysupport.coal_security.ui.activity.plans;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.infinity.jerry.securitysupport.R;
+import com.infinity.jerry.securitysupport.coal_security.dao.i_view.IViewPlanSyn;
+import com.infinity.jerry.securitysupport.coal_security.dao.presenter.PlanSynPresenter;
+import com.infinity.jerry.securitysupport.coal_security.dao.temp_entity.PlanRecordTemp;
 import com.infinity.jerry.securitysupport.coal_security.ui.activity.check.CheckNewActivity;
 import com.infinity.jerry.securitysupport.common.base.BaseActivity;
 import com.infinity.jerry.securitysupport.common.entity.PlanRecord;
@@ -16,6 +21,7 @@ import com.infinity.jerry.securitysupport.common.z_utils.z_adapter.ZViewHolder;
 import com.infinity.jerry.securitysupport.common.z_utils.z_callback.CallBack0;
 import com.infinity.jerry.securitysupport.common.z_utils.z_tools.ZDialogUtils;
 import com.infinity.jerry.securitysupport.common.z_utils.z_tools.ZUtils;
+import com.infinity.jerry.securitysupport.common.z_utils.z_widget.LoadingDialog;
 import com.infinity.jerry.securitysupport.common.z_utils.z_widget.ZTitleBar;
 
 import org.litepal.crud.DataSupport;
@@ -31,7 +37,7 @@ import es.dmoral.toasty.Toasty;
  * Created by jerry on 2017/11/13.
  */
 
-public class PlanActivity extends BaseActivity {
+public class PlanActivity extends BaseActivity implements IViewPlanSyn {
 
     @BindView(R.id.titleBar)
     ZTitleBar titleBar;
@@ -52,12 +58,16 @@ public class PlanActivity extends BaseActivity {
 
     private int viewState = -256;
 
+    private PlanSynPresenter presenter;
+    private Dialog dialog;
+
     public int getLayoutId() {
         return R.layout.activity_plan;
     }
 
     @Override
     public void initData() {
+        dialog = LoadingDialog.loadingDialog(this, "数据正在加载中", false);
         planLists = new ArrayList<>();
         viewState = 0;
 
@@ -65,13 +75,25 @@ public class PlanActivity extends BaseActivity {
 
     @Override
     public void initPresenter() {
+        presenter = PlanSynPresenter.getInstance(this);
+    }
 
+    private void getPlanList() {
+        dialog.show();
+        presenter.getMyPlans();
     }
 
     @Override
     public void initView() {
         titleBar.setTitle(getString(R.string.my_plan));
-        titleBar.setTitleMode(ZTitleBar.Companion.getMODE_NONE());
+        titleBar.setTitleMode(ZTitleBar.Companion.getMODE_TEXT());
+        titleBar.setTvPlusText("同步计划");
+        titleBar.setTextlistener(new ZTitleBar.OnTextModeListener() {
+            @Override
+            public void onClickTextMode() {
+                getPlanList();
+            }
+        });
         adapter = new ZCommonAdapter<PlanRecord>(this, planLists, R.layout.item_plan_list) {
             @Override
             public void convert(ZViewHolder holder, PlanRecord item, int position) {
@@ -197,4 +219,33 @@ public class PlanActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void getDataSucc(PlanRecordTemp data) {
+        Log.e("TAG", "获取plan成功");
+        List<PlanRecordTemp.PageListBean> pageList = data.getPageList();
+        List<PlanRecord> planList = new ArrayList<>();
+        if (pageList != null && pageList.size() > 0) {
+            for (PlanRecordTemp.PageListBean item : pageList) {
+                PlanRecord planRecord = new PlanRecord();
+                planRecord.setCompanyName(item.getCompany_name());
+                planRecord.setCompanyCode(Integer.valueOf(item.getCompany_code()));
+                planRecord.setIsStart(item.getIs_start());
+                planRecord.setIsFinish(item.getIs_finish());
+                planRecord.setStartTime(item.getStart_time());
+                planRecord.setEndTime(item.getEnd_time());
+                planRecord.setExcutePerson1(item.getExcute_person_1());
+                planRecord.setPlanName(item.getPlan_name());
+                planRecord.setPlanType(item.getPlan_type());
+                planList.add(planRecord);
+            }
+            DataSupport.saveAll(planList);
+        }
+        getPlanLists(0);
+        dialog.dismiss();
+    }
+
+    @Override
+    public void getDataError() {
+
+    }
 }

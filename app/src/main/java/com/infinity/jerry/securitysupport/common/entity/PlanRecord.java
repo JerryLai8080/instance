@@ -24,6 +24,15 @@ public class PlanRecord extends DataSupport implements Serializable {
     private int person2_id;
     private String excutePerson2;//执行人2名字
     private String planScheme;
+    private int planArea;
+
+    public int getPlanArea() {
+        return planArea;
+    }
+
+    public void setPlanArea(int planArea) {
+        this.planArea = planArea;
+    }
 
     public String getPlanScheme() {
         return planScheme;

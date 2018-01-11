@@ -104,7 +104,7 @@ public class CancelWorkOrderActivity extends BaseActivity {
         titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
             @Override
             public void onClickTextMode() {
-                save();
+                printAndSave(false);
                 Toasty.success(CancelWorkOrderActivity.this, "完成").show();
             }
         });
@@ -116,7 +116,7 @@ public class CancelWorkOrderActivity extends BaseActivity {
         });
     }
 
-    private void save() {
+    private void save(String path) {
         String inspItem = edInspItem.getText().toString().trim();
         String content = edContent.getText().toString().trim();
         String area = edArea.getText().toString().trim();
@@ -133,6 +133,7 @@ public class CancelWorkOrderActivity extends BaseActivity {
             //第一次
             PlanToDocEntity entityX = new PlanToDocEntity();
             entityX.setPlanId(planId);
+            entityX.setDocPath(path);
             entityX.setDocName("撤销作业人员命令书");
             entityX.setDocType(DocsConstant.ORDER_CANCELWORK);
             entityX.save();
@@ -150,7 +151,6 @@ public class CancelWorkOrderActivity extends BaseActivity {
 
 
     private void printAndSave(boolean isPrint) {
-        save();
         String content = edContent.getText().toString().trim();
         String area = edArea.getText().toString().trim();
         String result = edResult.getText().toString().trim();
@@ -170,12 +170,18 @@ public class CancelWorkOrderActivity extends BaseActivity {
         params.put("${result}", result);
         params.put("${advice}", advice);
 
-        CoalDocUtils.entryPrinterShare(this, "撤销作业人员命令书", "CheChuZuoYeRenYuanMingLingShu.doc", params, new CallBack1() {
-            @Override
-            public void callBack(Object object) {
-                Intent intent = (Intent) object;
-                startActivity(intent);
-            }
-        });
+        String resultX = null;
+        if (isPrint) {
+            CoalDocUtils.entryPrinterShare(this, "撤销作业人员命令书", "CheChuZuoYeRenYuanMingLingShu.doc", params, new CallBack1() {
+                @Override
+                public void callBack(Object object) {
+                    Intent intent = (Intent) object;
+                    startActivity(intent);
+                }
+            });
+        } else {
+            resultX = CoalDocUtils.writeDocAndGetPath(this, "撤销作业人员命令书", "CheChuZuoYeRenYuanMingLingShu.doc", params);
+            save(resultX);
+        }
     }
 }

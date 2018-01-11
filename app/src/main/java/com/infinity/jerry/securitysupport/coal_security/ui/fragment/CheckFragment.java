@@ -84,7 +84,7 @@ public class CheckFragment extends Fragment {
             }
         });
 
-        checkItemList = DataSupport.where("parent IS NULL").find(CoalCheckItem.class);
+        checkItemList = DataSupport.where("parent ISNULL").find(CoalCheckItem.class);
         superList = DataSupport.where("planId = ? AND isAllFinish = 256", String.valueOf(planId)).find(PlanCheckedItem.class);
         if (superList.isEmpty()) {
             superList = DataSupport.where("planId = ? AND type = 0", String.valueOf(planId)).find(PlanCheckedItem.class);

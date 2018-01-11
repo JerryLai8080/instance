@@ -1,30 +1,33 @@
 package com.infinity.jerry.securitysupport.coal_security.dao.presenter;
 
-import com.infinity.jerry.securitysupport.coal_security.dao.i_view.IViewDataSyn;
-import com.infinity.jerry.securitysupport.coal_security.dao.model.DataSynModel;
+import com.infinity.jerry.securitysupport.coal_security.dao.i_view.IViewPlanSyn;
+import com.infinity.jerry.securitysupport.coal_security.dao.model.PlanSynModel;
 import com.infinity.jerry.securitysupport.coal_security.dao.temp_entity.PlanRecordTemp;
+import com.infinity.jerry.securitysupport.common.z_utils.z_callback.CallBack0;
 import com.infinity.jerry.securitysupport.common.z_utils.z_mvp.ZResultSubscriber;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by jerry on 2017/12/27.
+ * Created by jerry on 2018/1/9.
  */
 
-public class DataSynPresenter {
+public class PlanSynPresenter {
 
-    private IViewDataSyn iViewDataSyn;
-    private DataSynModel model;
+    private IViewPlanSyn iViewPlanSyn;
+    private PlanSynModel model;
 
-    private DataSynPresenter(IViewDataSyn iViewDataSyn) {
-        this.iViewDataSyn = iViewDataSyn;
-        model = new DataSynModel();
+    private PlanSynPresenter(IViewPlanSyn iViewPlanSyn) {
+
+        this.iViewPlanSyn = iViewPlanSyn;
+        this.model = new PlanSynModel();
     }
 
-    public static DataSynPresenter getInstance(IViewDataSyn iViewDataSyn) {
-        return new DataSynPresenter(iViewDataSyn);
+    public static PlanSynPresenter getInstance(IViewPlanSyn iViewPlanSyn) {
+        return new PlanSynPresenter(iViewPlanSyn);
     }
+
 
     public void getMyPlans() {
         model.getAllPlan()
@@ -33,13 +36,15 @@ public class DataSynPresenter {
                 .subscribe(new ZResultSubscriber<PlanRecordTemp>() {
                     @Override
                     public void onSuccessZ(PlanRecordTemp planRecordTemps) {
-                        iViewDataSyn.getDataSucc(planRecordTemps);
+                        iViewPlanSyn.getDataSucc(planRecordTemps);
                     }
 
                     @Override
                     public void onErrorZ(Throwable throwable) {
-                        iViewDataSyn.getDataError();
+                        iViewPlanSyn.getDataError();
                     }
                 });
     }
+
+
 }

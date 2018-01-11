@@ -95,7 +95,7 @@ public class CloseCoalActivity extends BaseActivity {
         titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
             @Override
             public void onClickTextMode() {
-                save();
+                printAndSave(false);
                 Toasty.success(CloseCoalActivity.this, "完成").show();
             }
         });
@@ -107,7 +107,7 @@ public class CloseCoalActivity extends BaseActivity {
         });
     }
 
-    private void save() {
+    private void save(String path) {
         String inspItem = edInspItem.getText().toString().trim();
         String content = edContent.getText().toString().trim();
 
@@ -122,6 +122,7 @@ public class CloseCoalActivity extends BaseActivity {
             PlanToDocEntity entityX = new PlanToDocEntity();
             entityX.setPlanId(planId);
             entityX.setDocName("责令关闭矿井决定书");
+            entityX.setDocPath(path);
             entityX.setDocType(DocsConstant.CLOSE_COAL);
             entityX.save();
         } else {
@@ -136,7 +137,6 @@ public class CloseCoalActivity extends BaseActivity {
 
 
     private void printAndSave(boolean isPrint) {
-        save();
         String company = edInspItem.getText().toString().trim();
         String content = edContent.getText().toString().trim();
 
@@ -152,12 +152,18 @@ public class CloseCoalActivity extends BaseActivity {
         params.put("${content}", content);
         params.put("${linex}", DocMultiHelper.SOMETHING_SHIT);
 
-        CoalDocUtils.entryPrinterShare(this, "责令关闭矿井决定书", "ZeLingGuanBiKuangJingJueDingShu.doc", params, new CallBack1() {
-            @Override
-            public void callBack(Object object) {
-                Intent intent = (Intent) object;
-                startActivity(intent);
-            }
-        });
+        String result = null;
+        if (isPrint) {
+            CoalDocUtils.entryPrinterShare(this, "责令关闭矿井决定书", "ZeLingGuanBiKuangJingJueDingShu.doc", params, new CallBack1() {
+                @Override
+                public void callBack(Object object) {
+                    Intent intent = (Intent) object;
+                    startActivity(intent);
+                }
+            });
+        } else {
+            result = CoalDocUtils.writeDocAndGetPath(this, "责令关闭矿井决定书", "ZeLingGuanBiKuangJingJueDingShu.doc", params);
+            save(result);
+        }
     }
 }

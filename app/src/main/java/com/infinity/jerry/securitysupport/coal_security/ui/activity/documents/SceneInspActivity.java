@@ -85,7 +85,7 @@ public class SceneInspActivity extends BaseActivity {
     private String something;
     private CompanyCoalEntity company;
 
-    private void save() {
+    private void save(String path) {
         String inSpItem = edInspItem.getText().toString().trim();
         String place = edPlace.getText().toString().trim();
         String time = edTime.getText().toString().trim();
@@ -120,6 +120,7 @@ public class SceneInspActivity extends BaseActivity {
             entity.setPlanId(planId);
             entity.setDocName("现场检查记录");
             entity.setDocType(DocsConstant.SCENE_INSP);
+            entity.setDocPath(path);
             entity.save();
         } else {
             record.setPlanId(planId);
@@ -196,7 +197,7 @@ public class SceneInspActivity extends BaseActivity {
         titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
             @Override
             public void onClickTextMode() {
-                save();
+                printAndSave(false);
                 Toasty.success(SceneInspActivity.this, "完成").show();
             }
         });
@@ -336,12 +337,18 @@ public class SceneInspActivity extends BaseActivity {
         params.put("${secondPerson}", secondPersom);
         params.put("${advice}", advice);
 
-        CoalDocUtils.entryPrinterShare(this, "现场检查记录", "XianChangJianChaBiLu.doc", params, new CallBack1() {
-            @Override
-            public void callBack(Object object) {
-                Intent intent = (Intent) object;
-                startActivity(intent);
-            }
-        });
+        String result = null;
+        if (isPrint) {
+            CoalDocUtils.entryPrinterShare(this, "现场检查记录", "XianChangJianChaBiLu.doc", params, new CallBack1() {
+                @Override
+                public void callBack(Object object) {
+                    Intent intent = (Intent) object;
+                    startActivity(intent);
+                }
+            });
+        } else {
+            result = CoalDocUtils.writeDocAndGetPath(this, "现场检查记录", "XianChangJianChaBiLu.doc", params);
+            save(result);
+        }
     }
 }

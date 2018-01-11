@@ -112,7 +112,7 @@ public class TempCancelLicActivity extends BaseActivity {
         titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
             @Override
             public void onClickTextMode() {
-                save();
+                printAndSave(false);
                 Toasty.success(TempCancelLicActivity.this, "完成").show();
             }
         });
@@ -124,7 +124,7 @@ public class TempCancelLicActivity extends BaseActivity {
         });
     }
 
-    private void save() {
+    private void save(String path) {
         String inspItem = edInspItem.getText().toString().trim();
         String name = edName.getText().toString().trim();
         String content = edContent.getText().toString().trim();
@@ -150,6 +150,7 @@ public class TempCancelLicActivity extends BaseActivity {
             //第一次
             PlanToDocEntity entityX = new PlanToDocEntity();
             entityX.setPlanId(planId);
+            entityX.setDocPath(path);
             entityX.setDocName("暂扣或者吊销煤炭生产许可证决定书");
             entityX.setDocType(DocsConstant.TEMP_CANCEL_LIC);
             entityX.save();
@@ -167,12 +168,9 @@ public class TempCancelLicActivity extends BaseActivity {
         }
         setResult(RESULT_OK);
         finish();
-
-
     }
 
     private void printAndSave(boolean isPrint) {
-        save();
         String name = edName.getText().toString().trim();
         String content = edContent.getText().toString().trim();
         String company = edInspItem.getText().toString().trim();
@@ -200,13 +198,19 @@ public class TempCancelLicActivity extends BaseActivity {
         params.put("${contact}", contact);
         params.put("${phone}", phone);
 
-        CoalDocUtils.entryPrinterShare(this, "暂扣或者吊销煤炭生产许可证决定书", "ZanKouDiaoXiaoMeiTanLicShu.doc", params, new CallBack1() {
-            @Override
-            public void callBack(Object object) {
-                Intent intent = (Intent) object;
-                startActivity(intent);
-            }
-        });
+        String result = null;
+        if (isPrint) {
+            CoalDocUtils.entryPrinterShare(this, "暂扣或者吊销煤炭生产许可证决定书", "ZanKouDiaoXiaoMeiTanLicShu.doc", params, new CallBack1() {
+                @Override
+                public void callBack(Object object) {
+                    Intent intent = (Intent) object;
+                    startActivity(intent);
+                }
+            });
 
+        } else {
+            result = CoalDocUtils.writeDocAndGetPath(this, "暂扣或者吊销煤炭生产许可证决定书", "ZanKouDiaoXiaoMeiTanLicShu.doc", params);
+            save(result);
+        }
     }
 }

@@ -149,7 +149,7 @@ public class MainLeftFragment extends Fragment {
     }
 
     private void initView() {
-        int planCount = DataSupport.where("isSyn != 1 OR isSyn ISNULL AND isFinish = 1").count(PlanRecord.class);
+        int planCount = DataSupport.where("isSyn = 0 AND isFinish = 1").count(PlanRecord.class);
         int reviewCount = DataSupport.where("isSyn != 1 OR isSyn ISNULL").count(ReviewRecord.class);
         int caseCount = DataSupport.where("isSyn != 1 OR isSyn ISNULL").count(LowCaseRecord.class);
         tvSyn1.setText(String.valueOf(planCount));

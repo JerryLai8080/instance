@@ -146,7 +146,7 @@ public class InspEvidenceActivity extends BaseActivity {
         titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
             @Override
             public void onClickTextMode() {
-                save();
+                printAndSave(false);
                 Toasty.success(InspEvidenceActivity.this, "完成").show();
             }
         });
@@ -172,7 +172,7 @@ public class InspEvidenceActivity extends BaseActivity {
         });
     }
 
-    private void save() {
+    private void save(String path) {
         String inspItem = edInspItem.getText().toString().trim();
         String location = edLocation.getText().toString().trim();
         String content = edInspContent.getText().toString().trim();
@@ -211,6 +211,7 @@ public class InspEvidenceActivity extends BaseActivity {
             PlanToDocEntity entityX = new PlanToDocEntity();
             entityX.setPlanId(planId);
             entityX.setDocName("调查取证笔录");
+            entityX.setDocPath(path);
             entityX.setDocType(DocsConstant.EVIDENCE_INSP);
             entityX.save();
         } else {
@@ -285,14 +286,19 @@ public class InspEvidenceActivity extends BaseActivity {
         params.put("${invest_man}", investMan);
         params.put("${record_man}", investRecord);
 
-        CoalDocUtils.entryPrinterShare(this, "调查取证笔录", "DiaoChaQuZhengBiLu.doc", params, new CallBack1() {
-            @Override
-            public void callBack(Object object) {
-                Intent intent = (Intent) object;
-                startActivity(intent);
-            }
-        });
-
+        String result = null;
+        if (isPrint) {
+            CoalDocUtils.entryPrinterShare(this, "调查取证笔录", "DiaoChaQuZhengBiLu.doc", params, new CallBack1() {
+                @Override
+                public void callBack(Object object) {
+                    Intent intent = (Intent) object;
+                    startActivity(intent);
+                }
+            });
+        }else{
+            result = CoalDocUtils.writeDocAndGetPath(this, "调查取证笔录", "DiaoChaQuZhengBiLu.doc", params);
+            save(result);
+        }
     }
 }
 

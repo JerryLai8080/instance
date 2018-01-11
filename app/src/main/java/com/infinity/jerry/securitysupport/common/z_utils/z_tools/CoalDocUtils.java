@@ -49,6 +49,22 @@ public class CoalDocUtils {
         return docName;
     }
 
+    public static String writeDocAndGetPath(Context context, String fileName, String assetName,
+                                            HashMap<String, String> params) {
+        String dir = FileUtils.getCacheDir(context);
+        String newFileName = fileName + System.currentTimeMillis() + ".doc";
+        InputStream abpath;
+        try {
+            abpath = context.getAssets().open(assetName);
+            WordUtils wu = new WordUtils();
+            wu.writeDoc(abpath, dir + "/" + newFileName, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String path = dir + "/" + newFileName;
+        return path;
+    }
+
 
     public static void entryPrinterShare(Context context, String fileName, String assetName,
                                          HashMap<String, String> params, CallBack1 callBack1) {
@@ -91,27 +107,27 @@ public class CoalDocUtils {
                 break;
             case DocsConstant.LOW_INNER://档案卷内目录
                 strings[0] = "档案卷内目录";
-                strings[1] ="XingZhengJuanNeiMuLu.doc";
+                strings[1] = "XingZhengJuanNeiMuLu.doc";
                 break;
             case DocsConstant.ESTAB_DECIDE://立案决定书
                 strings[0] = "立案决定书";
-                strings[1] ="LiAnJueDingShu.doc";
+                strings[1] = "LiAnJueDingShu.doc";
                 break;
             case DocsConstant.LISTEN_RECORD://听证笔录
                 strings[0] = "听证笔录";
-                strings[1] ="XingZhengFuYiDiaoChaBiLu.doc";///!!!!!!!!没有？
+                strings[1] = "XingZhengFuYiDiaoChaBiLu.doc";///!!!!!!!!没有？
                 break;
             case DocsConstant.LOW_PUNISH_TELL://行政处罚告知书
                 strings[0] = "行政处罚告知书";
-                strings[1] ="XingZhengChuFaGaoZhiShu.doc";
+                strings[1] = "XingZhengChuFaGaoZhiShu.doc";
                 break;
             case DocsConstant.LOW_REDIS_INVEST://行政复议调查取证笔录
                 strings[0] = "行政复议调查取证笔录";
-                strings[1] ="XingZhengFuYiDiaoChaQuZhengBiLu.doc";
+                strings[1] = "XingZhengFuYiDiaoChaQuZhengBiLu.doc";
                 break;
             case DocsConstant.LOW_REDIS_APPLY://行政复议申请笔录
                 strings[0] = "行政复议申请笔录";
-                strings[1] ="XingZhengFuYiShenQingShu.doc";
+                strings[1] = "XingZhengFuYiShenQingShu.doc";
                 break;
             case DocsConstant.LOW_REDIS_DECIDE://行政复议决定书
                 strings[0] = "行政复议决定书";
@@ -119,27 +135,27 @@ public class CoalDocUtils {
                 break;
             case DocsConstant.LOW_PUNISH_DECIDE://行政处罚决定书
                 strings[0] = "行政处罚决定书";
-                strings[1] ="XingZhengChuFaJueDingShu.doc";
+                strings[1] = "XingZhengChuFaJueDingShu.doc";
                 break;
             case DocsConstant.LOW_PUNISH_SEND://行政处罚（行政复议）送达收执
                 strings[0] = "行政处罚（行政复议）送达收执";
-                strings[1] ="XingZhengChuFaSongDaFuZhidoc.doc";
+                strings[1] = "XingZhengChuFaSongDaFuZhidoc.doc";
                 break;
             case DocsConstant.FORCE_EXCUTE://强制执行申请书
                 strings[0] = "强制执行申请书";
-                strings[1] ="QiangZhiZhiXingShenQingShu.doc";
+                strings[1] = "QiangZhiZhiXingShenQingShu.doc";
                 break;
             case DocsConstant.FINISH_CASE://案件结案报告
                 strings[0] = "案件结案报告";
-                strings[1] ="AnJianJieAnBaoGao.doc";
+                strings[1] = "AnJianJieAnBaoGao.doc";
                 break;
             case DocsConstant.TRANS_TO://移送书
                 strings[0] = "移送书";
-                strings[1] ="YiSongShu.doc";
+                strings[1] = "YiSongShu.doc";
                 break;
             case DocsConstant.TRANS_CREMIAL://涉嫌犯罪案件移送书
                 strings[0] = "涉嫌犯罪案件移送书";
-                strings[1] ="SheXianFanZuiYiSongShu.doc";
+                strings[1] = "SheXianFanZuiYiSongShu.doc";
                 break;
         }
 

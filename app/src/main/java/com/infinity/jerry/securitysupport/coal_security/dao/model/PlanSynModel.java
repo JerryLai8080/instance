@@ -8,16 +8,20 @@ import com.infinity.jerry.securitysupport.common.z_utils.z_mvp.ZServiceFactory;
 import rx.Observable;
 
 /**
- * Created by jerry on 2017/12/27.
+ * Created by jerry on 2018/1/9.
  */
 
-public class DataSynModel {
+public class PlanSynModel {
 
+    public PlanSynModel() {
+
+    }
     public Observable<ZCommonEntity<PlanRecordTemp>> getAllPlan() {
         Observable observable = ZServiceFactory.getInstance()
                 .createService(MeiJianServer.PlanServer.class)
                 .getAllPlans();
         return observable;
     }
+
 
 }
