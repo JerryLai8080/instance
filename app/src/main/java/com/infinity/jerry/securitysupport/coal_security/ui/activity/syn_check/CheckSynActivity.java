@@ -2,6 +2,7 @@ package com.infinity.jerry.securitysupport.coal_security.ui.activity.syn_check;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import com.infinity.jerry.securitysupport.coal_security.dao.presenter.CheckSynPr
 import com.infinity.jerry.securitysupport.coal_security.dao.temp_entity.PlanDocTemp;
 import com.infinity.jerry.securitysupport.coal_security.dao.temp_entity.PlanRecordTemp;
 import com.infinity.jerry.securitysupport.common.base.BaseActivity;
+import com.infinity.jerry.securitysupport.common.entity.CheckItemRecord;
 import com.infinity.jerry.securitysupport.common.entity.PlanRecord;
 import com.infinity.jerry.securitysupport.common.entity.PlanToDocEntity;
 import com.infinity.jerry.securitysupport.common.z_utils.z_adapter.ZCommonAdapter;
@@ -120,7 +122,6 @@ public class CheckSynActivity extends BaseActivity implements IViewCheckSyn {
         entity.setCompany_name(item.getCompanyName());
         presenter.updatePlan(ZGsonUtils.getInstance().getJsonString(entity));
         dialog.show();
-
     }
 
     @Override
@@ -140,13 +141,20 @@ public class CheckSynActivity extends BaseActivity implements IViewCheckSyn {
 
     @Override
     public void updateDocSucc() {
-        Toasty.success(this, "同步成功").show();
+        List<CheckItemRecord> checkItemRecords = DataSupport.where("planId = ?", String.valueOf(currentId)).find(CheckItemRecord.class);
+        String jsonString = ZGsonUtils.getInstance().getJsonString(checkItemRecords);
         recordList.remove(currentItem);
         currentItem.setIsFinish(1);
         currentItem.setIsSyn(1);
         currentItem.update(currentItem.getId());
         currentId = -256;
         adapter.notifyDataSetChanged();
+        presenter.updateCheckItems(jsonString);
+    }
+
+    @Override
+    public void updateItemsSucc() {
+        Toasty.success(this, "同步成功").show();
         dialog.dismiss();
     }
 

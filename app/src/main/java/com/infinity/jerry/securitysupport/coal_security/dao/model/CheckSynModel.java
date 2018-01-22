@@ -42,4 +42,8 @@ public class CheckSynModel {
                 .synDocs(parts, planId);
         return observable;
     }
+
+    public Observable<ZCommonEntity<Object>> updateItems(String json){
+        return ZServiceFactory.getInstance().createService(MeiJianServer.PlanServer.class).synItems(json);
+    }
 }

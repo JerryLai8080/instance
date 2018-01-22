@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="safty_security" />
 
-    <version value="20" />
+    <version value="21" />
 
     <list>
         <mapping class="com.infinity.jerry.securitysupport.common.entity.CompanyCoalEntity" />
@@ -31,6 +31,12 @@
         <mapping class="com.infinity.jerry.securitysupport.coal_security.entity.TempCancelLic" />
         <mapping class="com.infinity.jerry.securitysupport.coal_security.entity.BeBetterAdvice" />
         <mapping class="com.infinity.jerry.securitysupport.coal_security.entity.CloseCoalDecide" />
+
+        <!-- 安监用的数据库 -->
+        <mapping class="com.infinity.jerry.securitysupport.safety_security.entity.SaComCatalog" />
+        <mapping class="com.infinity.jerry.securitysupport.safety_security.entity.SaCompany" />
+        <mapping class="com.infinity.jerry.securitysupport.safety_security.entity.SaCheckCata" />
+        <mapping class="com.infinity.jerry.securitysupport.safety_security.entity.SaCheckItems" />
     </list>
 
 </litepal>

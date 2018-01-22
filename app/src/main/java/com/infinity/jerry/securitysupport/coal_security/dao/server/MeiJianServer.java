@@ -38,7 +38,11 @@ public class MeiJianServer {
 
         @POST("plan/synDocs")
         @Multipart
-        Observable<ZCommonEntity<Object>> synDocs(@Part List<MultipartBody.Part> files,@Part("planId") int planId);
+        Observable<ZCommonEntity<Object>> synDocs(@Part List<MultipartBody.Part> files, @Part("planId") int planId);
+
+        @POST("/plan/updateItems")
+        @FormUrlEncoded
+        Observable<ZCommonEntity<Object>> synItems(@Field("map") String json);
     }
 
     public interface CompanyServer {

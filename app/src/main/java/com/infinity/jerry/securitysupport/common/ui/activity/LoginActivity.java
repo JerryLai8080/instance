@@ -11,12 +11,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.infinity.jerry.securitysupport.R;
-import com.infinity.jerry.securitysupport.coal_security.ui.activity.MainActivity;
+import com.infinity.jerry.securitysupport.coal_security.ui.activity.MainCoalActivity;
 import com.infinity.jerry.securitysupport.common.app.CommonApplication;
 import com.infinity.jerry.securitysupport.common.base.BaseActivity;
 import com.infinity.jerry.securitysupport.common.entity.User;
 import com.infinity.jerry.securitysupport.common.test.UserHelper;
 import com.infinity.jerry.securitysupport.common.z_utils.z_tools.ZShrPrefencs;
+import com.infinity.jerry.securitysupport.safety_security.ui.activity.MainSaftyActivity;
 
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class LoginActivity extends BaseActivity {
         String userName = edName.getText().toString();
         String pwd = edPwd.getText().toString();
 
-        if(userName.equals("")){
+        if (userName.equals("")) {
             Toasty.info(this, "用户名不能为空").show();
             return;
         }
@@ -124,9 +125,15 @@ public class LoginActivity extends BaseActivity {
         }
         if (isLogin) {
             ZShrPrefencs.getInstance().setNameAndPwd(userName, pwd, realName);
-            Intent intent = new Intent(this, MainActivity.class);
-            Toasty.success(this, "欢迎使用煤监执法系统,尊敬的" + realName + "同志").show();
-            startActivity(intent);
+            if (!CommonApplication.isMeijian) {
+                Intent intent = new Intent(this, MainCoalActivity.class);
+                Toasty.success(this, "欢迎使用煤监执法系统,尊敬的" + realName + "同志").show();
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, MainSaftyActivity.class);
+                Toasty.success(this, "欢迎使用安监执法系统,尊敬的" + realName + "同志").show();
+                startActivity(intent);
+            }
         } else {
             Toasty.error(this, "用户名或密码错误").show();
         }

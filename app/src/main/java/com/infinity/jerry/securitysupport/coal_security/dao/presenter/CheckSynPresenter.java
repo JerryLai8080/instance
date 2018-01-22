@@ -63,4 +63,22 @@ public class CheckSynPresenter {
                     }
                 });
     }
+
+    public void updateCheckItems(String json) {
+        model.updateItems(json)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ZResultSubscriber<Object>() {
+                    @Override
+                    public void onSuccessZ(Object o) {
+                        iViewCheckSyn.updateItemsSucc();
+                    }
+
+                    @Override
+                    public void onErrorZ(Throwable throwable) {
+                        iViewCheckSyn.updateError();
+                    }
+                });
+
+    }
 }

@@ -37,7 +37,6 @@ public class ReviewActivity extends BaseActivity {
 
     private int tempCode = 1231242424;
 
-
     private ZCommonAdapter<TempNamePara> adapter;
     private List<CheckItemRecord> itemRecords;
 

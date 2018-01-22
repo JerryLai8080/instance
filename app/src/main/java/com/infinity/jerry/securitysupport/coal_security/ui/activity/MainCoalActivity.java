@@ -18,7 +18,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity {
+public class MainCoalActivity extends BaseActivity {
 
     @BindView(R.id.titleBar)
     ZTitleBar titleBar;
@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity {
         titleBar.setOnTextModeListener(new ZTitleBar.OnTextModeListener() {
             @Override
             public void onClickTextMode() {//TestActivity
-                Intent intent = new Intent(MainActivity.this, SynAllDataActivity.class);
+                Intent intent = new Intent(MainCoalActivity.this, SynAllDataActivity.class);
                 startActivity(intent);
             }
         });

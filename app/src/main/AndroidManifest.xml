@@ -36,7 +36,7 @@
             android:name="BUGLY_ENABLE_DEBUG"
             android:value="true" />
 
-        <activity android:name=".coal_security.ui.activity.MainActivity" />
+        <activity android:name=".coal_security.ui.activity.MainCoalActivity" />
 
         <activity android:name=".common.ui.activity.LoginActivity">
             <intent-filter>
@@ -147,6 +147,9 @@
         <activity android:name=".coal_security.ui.activity.syn_check.CheckSynDetailActivity" />
         <activity android:name=".coal_security.ui.activity.syn_review.ReviewSynActivity" />
         <activity android:name=".coal_security.ui.activity.SynAllDataActivity" />
+        <activity android:name=".safety_security.ui.activity.MainSaftyActivity" />
+        <activity android:name=".safety_security.ui.activity.SaftyComCataListActivity" />
+        <activity android:name=".safety_security.ui.activity.SimpleListActivity" />
 
         <service android:name=".common.otherstuff.PDFDownloadService" />
     </application>

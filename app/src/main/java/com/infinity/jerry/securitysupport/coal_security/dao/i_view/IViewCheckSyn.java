@@ -11,4 +11,6 @@ public interface IViewCheckSyn {
     void updateError();
 
     void updateDocSucc();
+
+    void updateItemsSucc();
 }
