@@ -82,7 +82,6 @@ public class LawRuleSearchActivity extends SearchbarListActivity {
 
     @Override
     protected void onAsyncSearchStarted(String searchWord) {
-        Log.e("TAG", "11111111");
         mAdapter.setKeyword(searchWord);
         LawDBController instance = LawDBController.instance();
         final List<LawInfo> items = instance.db_getQueriedLawInfos(searchWord);

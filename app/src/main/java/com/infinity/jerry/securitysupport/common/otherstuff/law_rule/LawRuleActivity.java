@@ -69,7 +69,7 @@ public class LawRuleActivity extends SearchbarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-////        Set<String> histories = SecurityLawReference.getInstance().getLawRuleHistories();
+//        Set<String> histories = SecurityLawReference.getInstance().getLawRuleHistories();
 //        if (null != histories && !histories.isEmpty()) {
 //            mHistoryLL.setVisibility(View.VISIBLE);
 //            mAdapter.setItems(histories);

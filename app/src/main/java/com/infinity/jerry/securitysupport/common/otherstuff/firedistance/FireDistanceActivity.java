@@ -298,7 +298,6 @@ public class FireDistanceActivity extends TitlebarActivity {
         mMainInput = FireDistDataMgr.getInst().getPropUserInputValues(true);
         mNearbyInput = FireDistDataMgr.getInst().getPropUserInputValues(false);
         if(canDirectCalcWithoutNearby() || !isNearbyBuildingSelected()) {
-            Log.d("IceLi", "9999");
             mStrInstances = new String[]{getStructInstanceId(true, mainBuildingSelectID, 9999),
                                         getStructInstanceId(false, 9999, mainBuildingSelectID)};
         }
